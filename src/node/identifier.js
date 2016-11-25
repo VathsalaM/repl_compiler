@@ -16,7 +16,10 @@ IdentifierNode.prototype = {
 		return this.value==otherValue;
 	},
 	evaluate : function(){
-		return this;
+		if(this.value){
+			return this;
+		}
+		return error(this.name);
 	},
 	replaceIdentifiers : function(identifiers){
 		for(var i=0;i<identifiers.length;i++){
@@ -27,7 +30,7 @@ IdentifierNode.prototype = {
 			};
 		};
 		if(!value){
-			return error(this.value);
+			return error(this.name);
 		}
 	},
 	represent : function(){

@@ -11,7 +11,7 @@
 %%
 \s+         							{/* skip whitespace */}
 [0-9]+("."[0-9]+)?\b					return 'NUMBER'
-[a-zA-Z]+		                     	return 'IDENTIFIER'
+[a-z]+		                     	    return 'IDENTIFIER'
 "-"           							return '-';
 "/"           							return '/';
 "+"										return '+';
@@ -22,6 +22,7 @@
 "("           							return '(';
 ")"           							return ')';
 "="										return '=';
+"DEF"									return 'DEF';
 <<EOF>>        							return 'EOF';
 .             							return 'INVALID';
 
@@ -44,13 +45,14 @@ expression : e EOF{
 	return scope;
 };
 
-def : '+'
+definition : '+'
 	| '-'
 	| '*'
 	| '/'
 	| '!'
 	| '^'
 	| '='
+	| 'DEF'
 	;
 
 argument : e
@@ -65,7 +67,7 @@ arg_list : argument {arg_list.push($1);}
 		 | arg_list argument {arg_list.push($2);}
 		 ;
 
-e : "(" def arg_list ")"
+e : "(" definition arg_list ")"
 		{statement = new newParseTree(new node.operator($2),arg_list); arg_list = [];}
   | "(" argument ")"
   		{statement = $2;}

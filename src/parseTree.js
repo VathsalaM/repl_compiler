@@ -24,18 +24,12 @@ ParseTree.prototype = {
 		});
 	},
 	isAssignment : function(){
-		return this.node.isValue('=');
+		return this.node.isValue('def');
 	},
 	replaceIdentifiers : function(identifiers){
 		this.children.forEach(function(child){
 			child.replaceIdentifiers(identifiers);
 		});
-	},
-	addChild : function(child){
-		this.children.push(child);
-	},
-	addNode : function(node){
-		this.node = node;
 	}
 };
 

@@ -1,4 +1,5 @@
 var NumberNode = require('./number.js');
+var BooleanNode = require('./boolean.js');
 
 var factorial = function(a){
 	return (a==1)?a:factorial(a-1);
@@ -33,6 +34,10 @@ var fact = function(a,b){
 	return new NumberNode(factorial(a.value));
 };
 
+var equal = function(a,b){
+	return new BooleanNode(a.value==b.value);
+}
+
 // var lessThan = function(a,b){
 // 	return new BooleanNode(a.value<b.value);
 // };
@@ -46,7 +51,8 @@ var operators = {
     "-" : {value:"-",name:"minus",eval:sub},
     "*" : {value:"*",name:"times",eval:mul},
     "/" : {value:"/",name:"div",eval:div},
-    "=" : {value:"=",name:"assign",eval:assign},
+    "=" : {value:"=",name:"equal",eval:equal},
+    "DEF" : {value:"DEF",name:"assign",eval:assign},
     "^" : {value:"^",name:"pow",eval:pow},
     "!" : {value:"!",name:"fact",eval:fact},
     // "<" : {value:"<",name:"lessThan",eval:lessThan},
