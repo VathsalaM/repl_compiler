@@ -6,9 +6,13 @@
 .box{
 	width: 500px;
 	height: 650px;
-	display:inline-block;
+	display: inline-block;
 }
 
+.run{
+	width: 10px;
+	height: 10px;
+}
 .codeBox{
 	width: 500px;
 	height: 500px;

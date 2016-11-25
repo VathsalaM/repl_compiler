@@ -29,16 +29,12 @@ var isAssignment = function(){
 var Scope = function(identifiers){
 	this.statements = [];
 	this.identifiers = identifiers;
+	this.statementLength = statementLength;
+	this.addStatement = addStatement;
+	this.evaluate = evaluate;
+	this.replaceIdentifiers = replaceIdentifiers;
+	this.isAssignment = isAssignment;
 };
-
-Scope.prototype = {
-	statementLength : statementLength,
-	addStatement : addStatement,
-	evaluate : evaluate,
-	replaceIdentifiers : replaceIdentifiers,
-	isAssignment : isAssignment
-}
-
 
 var newScope = function(globalIdentifiers){
 	var identifiers = [{}];
