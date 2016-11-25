@@ -1,0 +1,23 @@
+{
+  "name": "JISON",
+  "version": "1.0.0",
+  "description": "JISON parser",
+  "main": "repl.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha",
+    "min": "mocha -R min --recursive",
+    "watch": "mocha -R min --watch --recursive"
+  },
+  "devDependencies": {
+    "jison": "^0.4.0",
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4"
+  },
+  "engines": {
+    "node": ">=0.12.0",
+    "npm": ">=1.2.0"
+  }
+}
