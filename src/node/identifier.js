@@ -5,6 +5,7 @@ var IdentifierNode = function(name){
 	this.value;
     this.type = "identifier";
     this.isParent;
+    this.isAssigned;
 };
 
 var error = function(value){
@@ -16,7 +17,10 @@ IdentifierNode.prototype = {
 		return this.value==otherValue;
 	},
 	evaluate : function(){
-		return this;
+		if(this.value || !this.isAssigned){
+			return this;
+		}
+		return error(this.name);
 	},
 	replaceIdentifiers : function(identifiers){
 		for(var i=0;i<identifiers.length;i++){
@@ -27,7 +31,7 @@ IdentifierNode.prototype = {
 			};
 		};
 		if(!value){
-			return error(this.value);
+			return error(this.name);
 		}
 	},
 	represent : function(){
@@ -37,7 +41,9 @@ IdentifierNode.prototype = {
 		return false;
 	},
 	replaceValue : function(newValue){
+		this.isAssigned = true;
 		this.value = newValue;
+		return this;
 	},
 	getName : function(){
 		return this.name;
