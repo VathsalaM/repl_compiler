@@ -2,7 +2,7 @@ var NumberNode = require('./number.js');
 var BooleanNode = require('./boolean.js');
 
 var factorial = function(a){
-	return (a==1)?a:factorial(a-1);
+	return (a==1)?a:a*factorial(a-1);
 }
 
 var add = function(a,b){
@@ -38,13 +38,24 @@ var equal = function(a,b){
 	return new BooleanNode(a.value==b.value);
 }
 
-// var lessThan = function(a,b){
-// 	return new BooleanNode(a.value<b.value);
-// };
+var lessThan = function(a,b){
+	return new BooleanNode(a.value<b.value);
+};
 
-// var greaterThan = function(a,b){
-// 	return new BooleanNode(a.value>b.value);
-// };
+var greaterThan = function(a,b){
+	return new BooleanNode(a.value>b.value);
+};
+
+var ifCondition = function(a,b){
+	if(a.evaluate().value) {
+		return b.evaluate();
+	}
+};
+
+var print = function(a){
+	console.log(a.value);
+	return a;
+}
 
 var operators = {
     "+" : {value:"+",name:"plus",eval:add},
@@ -52,11 +63,13 @@ var operators = {
     "*" : {value:"*",name:"times",eval:mul},
     "/" : {value:"/",name:"div",eval:div},
     "=" : {value:"=",name:"equal",eval:equal},
-    "DEF" : {value:"DEF",name:"assign",eval:assign},
+    "def" : {value:"def",name:"assign",eval:assign},
     "^" : {value:"^",name:"pow",eval:pow},
     "!" : {value:"!",name:"fact",eval:fact},
-    // "<" : {value:"<",name:"lessThan",eval:lessThan},
-    // ">" : {value:">",name:"greaterThan",eval:greaterThan}
+    "<" : {value:"<",name:"lessThan",eval:lessThan},
+    ">" : {value:">",name:"greaterThan",eval:greaterThan},
+    "if" :{value:"if",name:"if",eval:ifCondition},
+    "print":{value:"print",name:"print",eval:print}
 };
 
 module.exports = operators;

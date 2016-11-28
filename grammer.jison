@@ -3,15 +3,19 @@
 %{
 	var newParseTree = require('./src/parseTree.js');
 	var node = require('./src/node/node.js');
+	var Scope = require('./src/scope.js');
 	var statement;
-	var arg_list = [];
+	var args = [];
 %}
 
 %lex
 %%
 \s+         							{/* skip whitespace */}
-[0-9]+("."[0-9]+)?\b					return 'NUMBER'
-[a-z]+		                     	    return 'IDENTIFIER'
+"if"										return '?';
+"def"									return 'DEF';
+"print"									return 'print';
+[0-9]+("."[0-9]+)?\b					return 'NUMBER';
+[a-z]+		                     	    return 'IDENTIFIER';
 "-"           							return '-';
 "/"           							return '/';
 "+"										return '+';
@@ -22,7 +26,8 @@
 "("           							return '(';
 ")"           							return ')';
 "="										return '=';
-"DEF"									return 'DEF';
+">"										return '>';
+"<"										return '<';
 <<EOF>>        							return 'EOF';
 .             							return 'INVALID';
 
@@ -34,16 +39,28 @@
 %right '!'
 %right '%'
 
-%parse-param scope
-
-%start expression
+%start EX
 
 %%
 
-expression : e EOF{
-	scope.addStatement(statement);
-	return scope;
-};
+EX 
+	: expression_list EOF 
+		{	$$ = new Scope();
+			$$.addStatements([].concat($1));
+			return $$; 
+		}
+	;
+
+expression_list
+	:   expression
+		 	{ 
+		 		$$ = $1;
+		 	}
+	|	expression_list expression
+			{ 
+				$$ = [].concat($1,$2);
+			}
+	;
 
 definition : '+'
 	| '-'
@@ -53,22 +70,36 @@ definition : '+'
 	| '^'
 	| '='
 	| 'DEF'
+	| '?'
+	| '>'
+	| '<'
+	| 'print'
 	;
 
-argument : e
-			{}
-		 | NUMBER 
-		 	{$$=new node.number(Number($1));}
-		 | IDENTIFIER
-		 	{$$=new node.identifier($1);}
+argument :  "(" expression_list ")"
+			{	
+			 	$$ = new Scope();
+			 	$$.addStatements([].concat($2));
+			}
+			| expression {}
+		 	| NUMBER 
+			 	{$$=new node.number(Number($1));}
+		 	| IDENTIFIER
+		 		{$$=new node.identifier($1);}
+		 	;
+
+arg_list : argument {
+			args.push($1);
+			$$ = $1;
+			}
+		 | arg_list argument {
+		 	args.push($2);
+		 	$$ = [].concat($1,$2);
+		 }
 		 ;
 
-arg_list : argument {arg_list.push($1);}
-		 | arg_list argument {arg_list.push($2);}
-		 ;
-
-e : "(" definition arg_list ")"
-		{statement = new newParseTree(new node.operator($2),arg_list); arg_list = [];}
-  | "(" argument ")"
-  		{statement = $2;}
-;
+expression : "(" definition arg_list ")"
+				{  
+					$$ = new newParseTree(new node.operator($2),[].concat($3)); 
+				}
+			;
